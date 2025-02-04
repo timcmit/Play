@@ -194,7 +194,26 @@
             currentIndex = (currentIndex + 1) % playlist.length;
             playTrack(currentIndex);
         } 
-       
+        function toggleShuffle() {
+            shuffleMode = !shuffleMode;
+            document.getElementById("shuffleStatus").textContent = shuffleMode ? "ON" : "OFF";
+
+            if (shuffleMode) {
+                playlist = [...originalPlaylist].sort(() => Math.random() - 0.5);
+                currentIndex = 0; // Reset index to start from the first shuffled track
+                playTrack(currentIndex);
+            } else {
+                // Find the currently playing track in the original playlist
+                let currentTrack = playlist[currentIndex];
+                playlist = [...originalPlaylist];
+                let newIndex = playlist.findIndex(track => track.url === currentTrack.url);
+                currentIndex = newIndex !== -1 ? newIndex : 0; // Ensure a valid index
+                playTrack(currentIndex);
+            }
+            updatePlaylistDisplay();
+        }       
+        audioPlayer.addEventListener("ended", nextTrack);
+    </script>       
 
 </body>
 </html>
